@@ -69,9 +69,17 @@ export function addOrRemoveFavorite(params) {
 // 用户评分电影事件
 export function score(params) {
   return request({
-    url: requestUrl('/sys/user/update'),
+    url: requestUrl('/api/movie/kafka/score'),
     method: 'post',
-    data: requestParam(params)
+    transformRequest: [function (data) {
+      // 对 data 进行任意转换处理
+      data = Qs.stringify(data)
+      return data
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: params,
   })
 }
 

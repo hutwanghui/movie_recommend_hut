@@ -1,5 +1,9 @@
 <template>
+
   <section class="movie">
+    <div class="movie-recommend-left">
+      <recommend></recommend>
+    </div>
     <div class="movie__container" v-if="movieLoaded">
       <header class="movie__header" :class="{'movie__header--page': type=='page'}"
               :style="{ 'background-image': 'url(' + movieBackdropSrc + ')' }">
@@ -30,9 +34,9 @@
             </a>
             <a href="#" class="movie__actions-link" :class="{'active' : favorite === true}"
                @click.prevent="">
-              <Rating :grade="8" :maxStars="10" :hasCounter="true"/>
+              <Rating :grade="movie.vote_average" :mygrade="movie.vote_average" :maxStars="10" :hasCounter="true"
+                      :movieId="movie.id"/>
             </a>
-
           </div>
           <div class="movie__info">
             <div v-if="movie.overview" class="movie__description">
@@ -58,6 +62,9 @@
         </div>
       </div>
     </div>
+    <div class="movie-recommend-right">
+      <recommend></recommend>
+    </div>
   </section>
 </template>
 
@@ -67,7 +74,8 @@
   import img from '../directives/v-image.js'
   import formatDate from '../directives/v-formatDate.js'
   import API from '../api'
-  import Rating from './Rating' //引入评分组件
+  import Rating from './Rating'
+  import Recommend from "./recommend"; //引入评分组件
   export default {
     props: ['id', 'type'],
     directives: {
@@ -86,6 +94,7 @@
       }
     },
     components: {
+      Recommend,
       Rating
     },
     // computed: {
@@ -161,6 +170,7 @@
             this.$root.eventHub.$emit('updateFavorite')
           }.bind(this))
       }
+
     },
     watch: {
       id: function (val) {
@@ -176,7 +186,20 @@
 <style lang="scss">
   @import "../scss/variables";
   @import "../scss/media-queries";
-
+  .movie-recommend-left {
+    position: fixed;
+    top: 0;
+    left: 40px;
+    z-index: 20;
+    width: 50%;
+  }
+  .movie-recommend-right {
+    position: fixed;
+    top: 0;
+    right: -640px;
+    z-index: 20;
+    width: 50%;
+  }
   .movie {
     &__wrap {
       display: flex;

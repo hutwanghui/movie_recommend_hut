@@ -82,6 +82,7 @@
                 localStorage.setItem('user_id', this.dataForm.username)
                 this.$root.eventHub.$emit('setUserStatus')
                 this.userLoggedIn = true
+                // TODO 如果用户是新注册的，也就是冷启动，那么给与一个帮助用户了解自己喜好的页面
                 this.$router.replace({name: 'profile'})
               } else {
                 this.getCaptcha()
