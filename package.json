@@ -27,6 +27,7 @@
     "vue-axios": "^1.2.2",
     "vue-cookie": "1.1.4",
     "vue-full-loading": "^1.2.1",
+    "vue-list-marquee": "^1.0.47",
     "vue-router": "^3.0.1",
     "vue-style-loader": "3.0.1",
     "vue-tinder": "^1.0.0"

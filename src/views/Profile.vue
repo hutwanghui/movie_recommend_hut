@@ -55,7 +55,9 @@
         localStorage.setItem('session_id', id);
         this.eventHub.$emit('setUserStatus');
         this.userLoggedIn = true;
-        this.getUserInfo();
+        this.getUserInfo_simple();
+        // TODO 如果是使用微服务框架需要解开此条注释
+        // this.getUserInfo();
       },
       getUserInfo() {
         API.common.getInfo("beraer " + storage.sessionId)
@@ -67,6 +69,9 @@
           .catch(function (error) {
             this.logOut()
           }.bind(this))
+      },
+      getUserInfo_simple() {
+        this.userName = localStorage.getItem('user_id');
       },
       requestToken() {
         this.$root.eventHub.$emit('requestToken')
@@ -84,7 +89,9 @@
         this.requestPermission()
       } else {
         this.userLoggedIn = true
-        this.getUserInfo()
+        this.getUserInfo_simple();
+        // TODO 如果是使用微服务，需要解开此条注释
+        // this.getUserInfo()
       }
     }
   }

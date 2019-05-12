@@ -2,7 +2,7 @@
 
   <section class="movie">
     <div class="movie-recommend-left">
-      <recommend></recommend>
+      <recommend :movieId="movieId"></recommend>
     </div>
     <div class="movie__container" v-if="movieLoaded">
       <header class="movie__header" :class="{'movie__header--page': type=='page'}"
@@ -63,7 +63,7 @@
       </div>
     </div>
     <div class="movie-recommend-right">
-      <recommend></recommend>
+      <!--<recommend></recommend>-->
     </div>
   </section>
 </template>
@@ -90,7 +90,8 @@
         movieBackdropSrc: '',
         userLoggedIn: !!storage.sessionId,
         favoriteChecked: false,
-        favorite: ''
+        favorite: '',
+        movieId: ''
       }
     },
     components: {
@@ -178,6 +179,7 @@
       }
     },
     created() {
+      this.movieId = this.id;
       this.fetchMovie(this.id)
     }
   }

@@ -9,7 +9,7 @@
         </router-link>
       </header>
       <ul class="movies__list">
-        <movies-list-item class="movies__item" v-for="(movie, index) in movies" :key="movies"
+        <movies-list-item class="movies__item" v-for="(movie, index) in movies" :key="index"
                           :movie="movie"></movies-list-item>
       </ul>
       <div class="movies__nav" v-if="!shortList" :class="{'is-hidden' : currentPage == pages}">

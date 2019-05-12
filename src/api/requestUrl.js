@@ -7,9 +7,14 @@ export default function (actionName) {
   return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi/' : window.SITE_CONFIG.baseUrl) + actionName
 }
 
-export function authorUrl (actionName) {
-  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxy/' : window.SITE_CONFIG. baseUrl_2) + actionName
+export function authorUrl(actionName) {
+  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxy/' : window.SITE_CONFIG.baseUrl_2) + actionName
 }
-export function apiUrl (actionName) {
+
+export function apiUrl(actionName) {
   return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/kkapi/' : window.SITE_CONFIG.baseUrl_3) + actionName
+}
+
+export function userUrl(actionName) {
+  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/kkuser/' : window.SITE_CONFIG.baseUrl_4) + actionName
 }

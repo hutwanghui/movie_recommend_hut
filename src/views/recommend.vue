@@ -1,16 +1,22 @@
 <template>
-    <ul class="movies-recommend__list">
-        <li v-for="(movie, index) in movies" :key="movies" class="movies-item-recommend">
-          <a class="movies-item-recommend__link" :class="{'no-image': noImage}" :href="'/movie/' + movie.id"
-             @click.prevent="openMoviePopup(movie.id, true)">
-              <img v-if="!noImage" class="movies-item-recommend__img" src="../assets/placeholder.png" v-img="poster(movie.poster_path)" alt="">
-              <img v-if="noImage" class="movies-item-recommend__img is-loaded" src="../assets/no-image.png" alt="">
+  <vue-list-marquee class='my-marquee' :listData='movies' :option='marqueeOption1'>
+    <template slot-scope="{ item, index }">
+      <div class="list-item">
+        <div class='col1'>-{{index}}-</div>
+        <div class='col2' :title="item.title">
+          <a class="movies-item-recommend__link" :class="{'no-image': noImage}" :href="'/movie/' + item.id"
+             @click.prevent="openMoviePopup(item.id, true)">
+            <img v-if="!noImage" class="movies-item-recommend__img" src="../assets/placeholder.png"
+                 v-img="poster(item.poster_path)" alt="">
+            <img v-if="noImage" class="movies-item-recommend__img is-loaded" src="../assets/no-image.png" alt="">
             <div class="movies-item-recommend__content">
-              <p class="movies-item-recommend__title">{{ movie.title }}</p>
+              <p class="movies-item-recommend__title">{{ item.title }}</p>
             </div>
           </a>
-        </li>
-    </ul>
+        </div>
+      </div>
+    </template>
+  </vue-list-marquee>
 </template>
 
 <script>
@@ -18,10 +24,15 @@
   import numeral from 'numeral'
   import storage from '../storage.js'
   import img from '../directives/v-image.js'
+  import 'vue-list-marquee/dist/vue-list-marquee.css'
+  import {VueListMarquee} from 'vue-list-marquee'
 
   export default {
     name: "recommend",
-    props: ['type', 'mode', 'category', 'shortList','movie'],
+    props: ['movieId'],
+    components: {
+      VueListMarquee
+    },
     directives: {
       img: img
     },
@@ -39,7 +50,16 @@
         results: '',
         currentPage: 1,
         listLoaded: false,
-        noImage: false
+        noImage: false,
+        id: this.movieId,
+        currentmovieId: this.movieId,
+        marqueeOption1: {
+          moveTime: 500,
+          needRestTime: true,
+          restTime: 1000,
+          needHover: true,
+          delayTime: 0
+        },
       }
     },
     computed: {
@@ -50,7 +70,8 @@
         return this.$route.params.query || ''
       },
       request() {
-        return `https://api.themoviedb.org/3/movie/popular?api_key=${storage.apiKey}&language=zh-cn&page=${this.currentPage}`
+        // return `https://api.themoviedb.org/3/movie/popular?api_key=${storage.apiKey}&language=zh-cn&page=${this.currentPage}`
+        return `https://api.themoviedb.org/3/movie/${id}/similar?api_key=${storage.apiKey}&language=zh-CN&page=1`
       },
       countResults() {
         if (this.results > 1) {
@@ -69,11 +90,12 @@
         }
       },
       openMoviePopup(id, event) {
-
         this.$root.eventHub.$emit('openMoviePopup', id, event)
+        this.currentmovieId = id;
+        this.fetchCategory(id);
       },
-      fetchCategory() {
-        axios.get(this.request, {headers: {'Authorization': 'beraer ' + storage.sessionId}})
+      fetchCategory(id) {
+        axios.get('https://api.themoviedb.org/3/movie/' + id + '/similar?api_key=c2f8fe5b024fded37dbb4202e5657ebd&language=zh-CN&page=1', {headers: {'Content-Type': 'application/json;charset=utf-8'}})
           .then(function (resp) {
             let data = resp.data
             if (this.shortList) {
@@ -126,7 +148,7 @@
     },
     created() {
       // Set List Title
-      this.fetchCategory()
+      this.fetchCategory(this.currentmovieId)
       // this.$root.eventHub.$on('updateFavorite', this.updateFavorite)
     }
   }
@@ -134,6 +156,7 @@
 <style lang="scss">
   @import "../scss/variables";
   @import "../scss/media-queries";
+
   .movies-recommend {
 
     @include tablet-min {
@@ -193,7 +216,7 @@
     &__list {
       padding: 0;
       margin: 0;
-      width:80px;
+      width: 80px;
       list-style: none;
       display: table;
       flex-wrap: wrap;
@@ -220,6 +243,7 @@
       }
     }
   }
+
   .movies-item-recommend {
     &__link {
       text-decoration: none;
@@ -230,7 +254,7 @@
       padding-top: 15px;
     }
     &__img {
-      width: 100%;
+      width: 10%;
       opacity: 0;
       transform: scale(0.97) translateZ(0);
       transition: opacity 0.5s ease, transform 0.5s ease;
@@ -259,7 +283,8 @@
       color: rgba($c-green, 0.7);
     }
   }
-  ul{
+
+  ul {
 
   }
 </style>

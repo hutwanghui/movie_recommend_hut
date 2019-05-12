@@ -53,6 +53,8 @@ export default new Router({
       }
     },
     {name: 'login', path: '/login', components: {'page-router-view': _import('Login')}},
+    {name: 'login_simple', path: '/login_simple', components: {'page-router-view': _import('Login_simple')}},
+    {name: 'register', path: '/register', components: {'page-router-view': _import('register')}},
     {name: 'recommend', path: '/recommend', components: {'page-router-view': _import('InitRecommend')}},
     {name: 'myrecommend', path: '/myrecommend', components: {'page-router-view': _import('recommend')}},
     {

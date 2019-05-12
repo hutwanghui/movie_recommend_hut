@@ -11,9 +11,13 @@ import '@/scss/variables.scss'
 import '@/scss/media-queries.scss'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'vue-list-marquee/dist/vue-list-marquee.css'
+import VueListMarquee from 'vue-list-marquee'
+
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookie)
+Vue.use(VueListMarquee)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

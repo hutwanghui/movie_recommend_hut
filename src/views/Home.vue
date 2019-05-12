@@ -12,7 +12,7 @@
         </a>
       </div>
     </header>
-    <movies-list v-for="item in listTypes" :key="listTypes" v-if="item.isCategory" :type="'component'" :mode="'collection'"
+    <movies-list v-for="item in listTypes" :key="item.title" v-if="item.isCategory" :type="'component'" :mode="'collection'"
                  :category="item.query" :shortList="true"></movies-list>
   </section>
 </template>

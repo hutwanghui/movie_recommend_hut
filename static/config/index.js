@@ -10,6 +10,8 @@
   // window.SITE_CONFIG.baseUrl_2 = '//www.hutwanghui.club:8960/kkcms-gate'
   window.SITE_CONFIG.baseUrl_3 = '//localhost:8960/kkcms-api'
   // window.SITE_CONFIG.baseUrl_3 = '//www.hutwanghui.club:8960/kkcms-api'
+  window.SITE_CONFIG.baseUrl_4 = '//localhost:8960/kkcms-user'
+  // window.SITE_CONFIG.baseUrl_4 = '//www.hutwanghui.club:8960/kkcms-user'
   // 嵌套iframe地址
   window.SITE_CONFIG.nestIframeUrl = '//localhost:8960/kkcms-houtai/'
   // window.SITE_CONFIG.nestIframeUrl = '//www.hutwanghui.club:8960/kkcms-houtai/'
