@@ -16,6 +16,20 @@ export function getFavoriteMovies(username) {
     // }
   })
 }
+
+// 获取用户当前电影评分
+export function getMovieRateByMovieId(movieId,username) {
+
+  return $.ajax({
+    url: requestUrl('api/movie/personaldate/get?movieId='+ movieId+'&username='+username),
+    method: 'get',
+    async: false, //或false,是否异步
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+
 //登陆(简易单系统)
 export function login_simple(params) {
   return axios.request({
@@ -49,7 +63,6 @@ export function getInfo() {
 
 
 export function checkIfFavoriteMovies(params) {
-
   return request({
     url: requestUrl('/api/movie/checkIfFavorite'),
     transformRequest: [function (data) {

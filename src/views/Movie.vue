@@ -170,7 +170,14 @@
             this.favorite = favoriteInvert
             this.$root.eventHub.$emit('updateFavorite')
           }.bind(this))
-      }
+      },
+        personrate() {
+        var personalstat = API.movie.getMovieRateByMovieId(this.movieId, localStorage.getItem('user_id'));
+        console.info("======="+personalstat+"=======");
+        if(personalstat!=null&&personalstat!=0) {
+          this.movie.vote_average = personalstat;
+        }
+  }
 
     },
     watch: {
@@ -180,7 +187,8 @@
     },
     created() {
       this.movieId = this.id;
-      this.fetchMovie(this.id)
+      this.fetchMovie(this.id);
+      this.personrate();
     }
   }
 </script>
@@ -193,7 +201,7 @@
     top: 0;
     left: 40px;
     z-index: 20;
-    width: 50%;
+    width: 400px;
   }
   .movie-recommend-right {
     position: fixed;
@@ -252,6 +260,7 @@
       display: none;
       @include tablet-min {
         background: $c-dark;
+
         display: block;
         position: absolute;
         width: calc(45% - 40px);

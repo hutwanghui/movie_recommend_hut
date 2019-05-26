@@ -57,8 +57,10 @@
         API.movie.score(params)
           .then(function (resp) {
           }.bind(this))
-      }
+      },
+
     }
+
   }
 </script>
 <style scoped>

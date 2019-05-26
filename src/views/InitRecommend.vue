@@ -13,15 +13,18 @@
       <template slot-scope="{data}">
         <div
           class="picture"
-          :style="`background-image:url(https://image.tmdb.org/t/p/w600_and_h900_bestv2/${data.key.poster_path})`">
+          :style="`background-image:url(https://image.tmdb.org/t/p/w600_and_h900_bestv2/${data.key.poster_path})`"
+        >
         </div>
+
       </template>
       <img class="like-pointer" slot="like" src="https://johnnydan.oss-cn-beijing.aliyuncs.com/vue-tinder/like-txt.png">
       <img class="nope-pointer" slot="nope" src="https://johnnydan.oss-cn-beijing.aliyuncs.com/vue-tinder/nope-txt.png">
       <img class="super-pointer" slot="super"
            src="https://johnnydan.oss-cn-beijing.aliyuncs.com/vue-tinder/super-txt.png">
+
     </tinder>
-    <div class="movieMsg" v-if="movie&&show==false">
+    <div class="movieMsg" v-if="movie&&show==false" >
       <p>片名：{{movie.title}}</p>
       <p>简介：{{movie.overview}}</p>
       <p>大众评分：{{movie.vote_average}}</p>
@@ -55,6 +58,7 @@
         movies: [],
         movie: {
           id: 433059,
+          myindex: 0,
           vote_count: 9,
           video: "false",
           vote_average: 7.3,
@@ -82,9 +86,12 @@
         API.movie.initGet().then(({data}) => {
           let list = [];
           this.movies = data.movies;
+          for (let j = 0; j < 10; j++) {
+            this.movies[j].myindex=j+1;
+          }
           for (let i = 0; i < 10; i++) {
             list.push({
-              key: data.movies[i]
+              key: data.movies[i],
             })
           }
           this.queue = this.queue.concat(list)
@@ -102,6 +109,7 @@
         this.movie.overview = data.overview;
         this.movie.vote_average = data.vote_average;
         this.movie.release_data = data.release_date;
+        this.movie.poster_path=data.poster_path;
       },
       /**
        * 点击按钮所绑定的方法，此方法为调用vue-tinder组件内方法的示例，仅供参考
@@ -117,7 +125,8 @@
        * @param  {Object} choice {type,key}
        */
       submit(choice) {
-        this.changeMovieInfo(choice.key);
+        console.info("===="+choice.key.myindex);
+        this.changeMovieInfo(this.movies[choice.key.myindex<10?choice.key.myindex:10]);
         switch (choice.type) {
           case 'nope': // 左滑
             console.info("【用户：" + localStorage.getItem('user_id') + "】触发左移事件");
@@ -144,7 +153,7 @@
         API.movie.initSave(params).then(({data}) => {
           console.info("回调结果哦：" + data);
         });
-        if (this.queue.length == 0) {
+        if (this.queue.length == 1) {
           this.showMe();
           console.info("完成初始化");
           this.getData();

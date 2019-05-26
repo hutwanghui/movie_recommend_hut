@@ -1,32 +1,41 @@
 <template>
   <section>
-    <div class="site-content__wrapper">
-      <div class="site-content">
-        <div class="login-main">
-          <h3 class="login-title">登录</h3>
+    <el-row style="padding-top: 100px">
+      <el-col :span="8">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+      <el-col :span="8">
+        <div class="grid-content bg-purple-light">
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm"
                    @keyup.enter.native="dataFormSubmit()"
                    status-icon>
+            <h3 class="login-title">登录</h3>
             <el-form-item prop="username">
               <el-input v-model="dataForm.username" placeholder="帐号"></el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
+              <el-input v-model="dataForm.password"  type="password" placeholder="密码"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()">登录
               </el-button>
+              <el-button class="login-btn-submit" type="primary" @click="register()">注册
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
-      </div>
-    </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+    </el-row>
   </section>
 </template>
 
 <script>
   import API from '../api'
   import {getUUID} from '../utils'
+
   export default {
     data() {
       return {
@@ -59,8 +68,7 @@
               'password': this.dataForm.password
             }
             API.movie.login_simple(params).then(({data}) => {
-
-              if (data&&data.code===0) {
+              if (data && data.code === 0) {
                 console.debug(data);
                 localStorage.setItem('user_id', this.dataForm.username)
                 localStorage.setItem('session_id', this.dataForm.username);
@@ -76,6 +84,9 @@
           }
         })
       },
+      register() {
+        this.$router.push({ name: 'register' })
+      }
     },
     name: 'login_simple'
   }
@@ -136,7 +147,8 @@
       top: 0;
       right: 0;
       padding: 150px 60px 180px;
-      width: 470px;
+      margin: 0 auto;
+      width: 200px;
       min-height: 100%;
       background-color: #fff;
     }
@@ -154,5 +166,23 @@
       width: 100%;
       margin-top: 38px;
     }
+  }
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .el-col {
+    border-radius: 4px;
+  }
+
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
   }
 </style>

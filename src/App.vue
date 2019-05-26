@@ -50,7 +50,10 @@
       // User Session Methods
       requestToken() {
         storage.sessionId = null
-        this.$router.push({ name: 'login' })
+        // TODO 微服务登陆页面入口
+        // this.$router.push({ name: 'login' })
+        // TODO 建议版登陆页面入口
+        this.$router.push({ name: 'login_simple' })
       },
       setUserStatus() {
         storage.sessionId = localStorage.getItem('session_id') || null

@@ -1,8 +1,11 @@
 <template>
   <section>
-    <div class="site-content__wrapper">
-      <div class="site-content">
-        <div class="login-main">
+    <el-row style="padding-top: 100px">
+      <el-col :span="8">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+      <el-col :span="8">
+        <div class="grid-content bg-purple-light">
           <h3 class="login-title">注册页面</h3>
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm"
                    @keyup.enter.native="dataFormSubmit()"
@@ -29,8 +32,12 @@
             </el-form-item>
           </el-form>
         </div>
-      </div>
-    </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+    </el-row>
+
   </section>
 </template>
 
@@ -39,6 +46,47 @@
 
   export default {
     data() {
+      var repasswordAcquaintance = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.dataForm.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
+      var checkPhone = (rule, value, callback) => {
+        const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+        if (!value) {
+          return callback(new Error('电话号码不能为空'))
+        }
+        setTimeout(() => {
+          // Number.isInteger是es6验证数字是否为整数的方法,但是我实际用的时候输入的数字总是识别成字符串
+          // 所以我就在前面加了一个+实现隐式转换
+          if (!Number.isInteger(+value)) {
+            callback(new Error('请输入数字值'));
+          } else {
+            if (phoneReg.test(value)) {
+              callback()
+            } else {
+              callback(new Error('电话号码格式不正确'));
+            }
+          }
+        }, 100)
+      };
+      var checkEmail = (rule, value, callback) => {
+        const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+        if (!value) {
+          return callback(new Error('邮箱不能为空'));
+        }
+        setTimeout(() => {
+          if (mailReg.test(value)) {
+            callback()
+          } else {
+            callback(new Error('请输入正确的邮箱格式'));
+          }
+        }, 100)
+      };
       return {
         dataForm: {
           username: '',
@@ -55,13 +103,25 @@
             {required: true, message: '密码不能为空', trigger: 'blur'}
           ],
           repassword: [
-            {required: true, message: '密码不能为空', trigger: 'blur'}
+            {required: true, message: '密码不能为空', trigger: 'blur'},
+            {
+              validator: repasswordAcquaintance, // 自定义验证
+              trigger: 'blur'
+            }
           ],
           email: [
-            {required: true, message: '邮箱不能为空', trigger: 'blur'}
+            {required: true, message: '邮箱不能为空', trigger: 'blur'},
+            {
+              validator: checkEmail, // 自定义验证
+              trigger: 'blur'
+            }
           ],
           mobile: [
-            {required: true, message: '手机号不能为空', trigger: 'blur'}
+            {required: true, message: '手机号不能为空', trigger: 'blur'},
+            {
+              validator: checkPhone, // 自定义验证
+              trigger: 'blur'
+            }
           ],
         },
       }
@@ -80,9 +140,31 @@
               "mobile": this.dataForm.mobile,
               "email": this.dataForm.email
             };
-            API.common.register(params).then(({data}) => {
+            API.movie.register(params).then(({data}) => {
               // TODO 如果用户是新注册的，也就是冷启动，那么给与一个帮助用户了解自己喜好的页面
-              this.$router.replace({name: 'login_simple'})
+              if (data.code == 500) {
+                this.$message.error(data.msg)
+              } else {
+                var params_2 = {
+                  "username": this.dataForm.username,
+                  "password": this.dataForm.password,
+                };
+                API.movie.login_simple(params_2).then(({data}) => {
+                  if (data && data.code === 0) {
+                    console.debug(data);
+                    localStorage.setItem('user_id', this.dataForm.username)
+                    localStorage.setItem('session_id', this.dataForm.username);
+                    this.$root.eventHub.$emit('setUserStatus')
+                    this.userLoggedIn = true
+                    // TODO 如果用户是新注册的，也就是冷启动，那么给与一个帮助用户了解自己喜好的页面
+                    this.$router.replace({name: 'recommend'})
+                  } else {
+                    console.debug(data);
+                    this.$message.error(data.msg)
+                  }
+                })
+              }
+
             });
           }
         })

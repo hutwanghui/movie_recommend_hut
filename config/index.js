@@ -13,14 +13,14 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: devEnv.OPEN_PROXY === false ? {} : {
       '/proxyApi': {
-        target: 'http://localhost:7777',
+        target: 'http://172.27.57.64:7777',
         changeOrigin: true,
         pathRewrite: {
           '^/proxyApi': '/'
         }
       },
       '/proxy': {
-        target: 'http://localhost:8960/kkcms-gate',
+        target: 'http://172.27.57.64:8960/kkcms-gate',
         // target: 'http://localhost:8965',
         // target: 'http://172.22.232.213:8960/kkcms-gate',
         changeOrigin: true,
@@ -32,7 +32,7 @@ module.exports = {
         }
       },
       '/kkuser': {
-        target: 'http://localhost:8960/kkcms-user',
+        target: 'http://172.27.57.64:8960/kkcms-user',
         // target: 'http://172.22.232.213:8960/kkcms-api',
         changeOrigin: true,
         pathRewrite: {
@@ -40,7 +40,7 @@ module.exports = {
         }
       },
       '/kkapi': {
-        target: 'http://localhost:8960/kkcms-api',
+        target: 'http://172.27.57.64:8960/kkcms-api',
         // target: 'http://172.22.232.213:8960/kkcms-api',
         changeOrigin: true,
         pathRewrite: {

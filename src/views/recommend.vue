@@ -156,7 +156,9 @@
 <style lang="scss">
   @import "../scss/variables";
   @import "../scss/media-queries";
-
+  .my-marquee{
+    width: 400px;
+  }
   .movies-recommend {
 
     @include tablet-min {
